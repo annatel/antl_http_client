@@ -2,6 +2,21 @@ defmodule AntlHttpClientTest.HttpClientTest do
   use AntlHttpClientTest.Case
 
   describe "request/4" do
+    test "get request with query params", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/test", fn conn ->
+        assert "key1=value&key2=value" == conn.query_string
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :get,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"},
+                 query_params: %{"key1" => "value", "key2" => "value"}
+               })
+    end
+
     test "content-type: application/json", %{bypass: bypass} do
       params = %{"data" => "data"}
 
@@ -13,7 +28,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       end)
 
       assert {:ok, _} =
-               AntlHttpClient.request(InsecureFinch, "api_provider", %{
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
                  method: :post,
                  resource: "#{base_url()}/test",
                  headers: %{"content-type" => "application/json"},
@@ -34,7 +49,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       end)
 
       assert {:ok, _} =
-               AntlHttpClient.request(InsecureFinch, "api_provider", %{
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
                  method: :post,
                  resource: "#{base_url()}/test",
                  headers: %{"content-type" => "application/x-www-form-urlencoded"},
@@ -50,7 +65,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:error, {400, %{}}} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{method: :post, resource: "#{base_url()}/test", headers: headers(), body: %{}},
                  []
                )
@@ -64,7 +79,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:error, {403, %{"result" => "bad_request"}}} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{method: :post, resource: "#{base_url()}/test", headers: headers(), body: %{}},
                  []
                )
@@ -78,7 +93,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:error, "server_error"} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{method: :post, resource: "#{base_url()}/test", headers: headers(), body: %{}},
                  []
                )
@@ -88,7 +103,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       Bypass.down(bypass)
 
       assert {:error, "connection refused"} =
-               AntlHttpClient.request(InsecureFinch, "api_provider", %{
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
                  method: :post,
                  resource: "#{base_url()}/test",
                  headers: headers(),
@@ -105,7 +120,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:error, "timeout"} =
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
@@ -132,7 +147,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, response} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
@@ -162,7 +177,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, response} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_name",
+                 "api_service_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
@@ -196,7 +211,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, response} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_name",
+                 "api_service_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
@@ -235,7 +250,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, _} =
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
@@ -273,7 +288,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, _} =
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
@@ -300,7 +315,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, %{}} =
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{method: :post, resource: "#{base_url()}/", headers: headers(), body: %{}},
                  logger: Logger
                )
@@ -312,7 +327,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:error, error} =
                AntlHttpClient.request(
                  SecureFinch,
-                 "api_provider",
+                 "api_service_name",
                  %{
                    method: :get,
                    resource: "https://untrusted-root.badssl.com/",
@@ -332,7 +347,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
     test "bypassed ssl" do
       assert AntlHttpClient.request(
                InsecureFinch,
-               "api_provider",
+               "api_service_name",
                %{
                  method: :get,
                  resource: "https://untrusted-root.badssl.com/",
