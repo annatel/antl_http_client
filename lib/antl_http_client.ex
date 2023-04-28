@@ -218,6 +218,8 @@ defmodule AntlHttpClient do
   defp encode!("application/json", body), do: Jason.encode!(body)
   defp encode!("application/x-www-form-urlencoded", body), do: URI.encode_query(body, :rfc3986)
 
+  defp obfuscate(data, []), do: data
+
   defp obfuscate(data, obfuscate_keys) when is_map(data) do
     Map.new(data, fn
       {key, nil} ->
