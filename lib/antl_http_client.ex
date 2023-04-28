@@ -234,6 +234,9 @@ defmodule AntlHttpClient do
 
       {key, val} when is_binary(val) or is_integer(val) ->
         {key, if(key in obfuscate_keys, do: obfuscate_value(val), else: val)}
+
+      {key, val} when is_boolean(val) ->
+        {key, val}
     end)
   end
 
