@@ -70,7 +70,8 @@ defmodule AntlHttpClient do
       requested_at: DateTime.utc_now()
     }
     |> send_request(finch_instance, api_provider,
-      obfuscate_keys: Keyword.get(opts, :obfuscate_keys, []),
+      obfuscate_request_keys: Keyword.get(opts, :obfuscate_request_keys, []),
+      obfuscate_response_keys: Keyword.get(opts, :obfuscate_response_keys, []),
       logger: Keyword.get(opts, :logger, @default_logger),
       receive_timeout: Keyword.get(opts, :receive_timeout, @default_receive_timeout)
     )
@@ -162,7 +163,7 @@ defmodule AntlHttpClient do
   end
 
   defp build_outgoing_request_create_params(api_provider, request, opts) do
-    obfuscate_keys = Keyword.get(opts, :obfuscate_keys, [])
+    obfuscate_keys = Keyword.get(opts, :obfuscate_request_keys, [])
 
     obfuscate_request = obfuscate_request(request, obfuscate_keys)
 
@@ -178,7 +179,7 @@ defmodule AntlHttpClient do
   end
 
   defp build_outgoing_request_update_params(response, opts) do
-    obfuscate_keys = Keyword.get(opts, :obfuscate_keys, [])
+    obfuscate_keys = Keyword.get(opts, :obfuscate_response_keys, [])
     obfuscated_response = obfuscate_response(response, obfuscate_keys)
 
     %{

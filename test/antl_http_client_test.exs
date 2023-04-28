@@ -149,7 +149,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert query.changes[:response_body] == inspect(response)
     end
 
-    test "recursively obfuscate keys", %{bypass: bypass} do
+    test "recursively obfuscate request keys", %{bypass: bypass} do
       params = %{"data" => %{"secret" => "secret"}}
       response = %{"data" => %{"secret" => "secret"}}
 
@@ -162,14 +162,14 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert {:ok, response} ==
                AntlHttpClient.request(
                  InsecureFinch,
-                 "api_provider",
+                 "api_name",
                  %{
                    method: :post,
                    resource: "#{base_url()}/test",
                    headers: %{"authorization" => "token", "content-type" => "application/json"},
                    body: params
                  },
-                 obfuscate_keys: ["secret"],
+                 obfuscate_request_keys: ["secret"],
                  logger: :app_recorder
                )
 
@@ -178,6 +178,37 @@ defmodule AntlHttpClientTest.HttpClientTest do
 
       assert_received {:insert, query}
       assert query.fields[:request_body] == obfuscated_request_body
+
+      assert_received {:update, query}
+      assert query.changes[:response_body] == inspect(response)
+    end
+
+    test "recursively obfuscate response keys", %{bypass: bypass} do
+      params = %{"data" => %{"secret" => "secret"}}
+      response = %{"data" => %{"secret" => "secret"}}
+
+      Bypass.expect_once(bypass, "POST", "/test", fn conn ->
+        encoded_params = Jason.encode!(params)
+        {:ok, ^encoded_params, conn} = conn |> Plug.Conn.read_body()
+        Plug.Conn.resp(conn, 200, response |> Jason.encode!())
+      end)
+
+      assert {:ok, response} ==
+               AntlHttpClient.request(
+                 InsecureFinch,
+                 "api_name",
+                 %{
+                   method: :post,
+                   resource: "#{base_url()}/test",
+                   headers: %{"authorization" => "token", "content-type" => "application/json"},
+                   body: params
+                 },
+                 obfuscate_response_keys: ["secret"],
+                 logger: :app_recorder
+               )
+
+      assert_received {:insert, query}
+      assert query.fields[:request_body] == Jason.encode!(params)
 
       obfuscated_response_body = %{"data" => %{"secret" => "se#{String.duplicate("*", 20)}"}}
       assert_received {:update, query}
@@ -211,7 +242,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
                    headers: %{"authorization" => "token", "content-type" => "application/json"},
                    body: params
                  },
-                 obfuscate_keys: ["binary", "empty_binary", "nil", "integer", "boolean"],
+                 obfuscate_request_keys: ["binary", "empty_binary", "nil", "integer", "boolean"],
                  logger: :app_recorder
                )
 
@@ -249,7 +280,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
                    headers: %{"authorization" => "token", "content-type" => "application/json"},
                    body: params
                  },
-                 obfuscate_keys: ["secret"],
+                 obfuscate_request_keys: ["secret"],
                  logger: :app_recorder
                )
 
