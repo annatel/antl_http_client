@@ -2,6 +2,7 @@ defmodule AntlHttpClient.MixProject do
   use Mix.Project
 
   @version "0.3.0"
+  @source_url "https://github.com/annatel/antl_http_client"
 
   def project do
     [
@@ -11,7 +12,9 @@ defmodule AntlHttpClient.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      description: "Wrapper on Finch Http client",
+      package: package()
     ]
   end
 
@@ -23,6 +26,13 @@ defmodule AntlHttpClient.MixProject do
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
+    ]
+  end
 
   defp deps do
     [
