@@ -90,7 +90,7 @@ defmodule AntlHttpClientTest.HttpClientTest do
         Plug.Conn.resp(conn, 500, "internal server error")
       end)
 
-      assert {:error, "server_error"} ==
+      assert {:error, {500, "internal server error"}} ==
                AntlHttpClient.request(
                  InsecureFinch,
                  "api_service_name",

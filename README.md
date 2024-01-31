@@ -1,6 +1,17 @@
 # AntlHttpClient
 
-**TODO: Add description**
+# Changelog
+
+## 0.3.0
+
+### 1. Enhancements
+  * 500 and unknown errors more verbose. Returns tuple instead of http_status only.
+
+### 2. Bug fixes
+
+### 3. Soft deprecations (no warnings emitted)
+
+### 4. Hard deprecations
 
 ## Installation
 
@@ -10,7 +21,7 @@ by adding `antl_http_client` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:antl_http_client, "~> 0.1.0"}
+    {:antl_http_client, "~> 0.3.0"}
   ]
 end
 ```

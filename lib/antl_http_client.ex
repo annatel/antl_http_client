@@ -140,11 +140,11 @@ defmodule AntlHttpClient do
       %{response_http_status: status, response_body: response_body} when status in 400..499 ->
         {:error, {status, response_body}}
 
-      %{response_http_status: status} when status >= 500 ->
-        {:error, "server_error"}
+      %{response_http_status: status, response_body: response_body} when status >= 500 ->
+        {:error, {status, response_body}}
 
       _ ->
-        {:error, "unknown_error"}
+        {:error, {"unknown_error", inspect(response[:response_body])}}
     end
   end
 
