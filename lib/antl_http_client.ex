@@ -37,6 +37,21 @@ defmodule AntlHttpClient do
     }
   end
 
+  def post(finch_instance, api_service_name, params, opts \\ []),
+    do: request(finch_instance, api_service_name, params |> Map.put(:method, :post), opts)
+
+  def get(finch_instance, api_service_name, params, opts \\ []),
+    do: request(finch_instance, api_service_name, params |> Map.put(:method, :get), opts)
+
+  def delete(finch_instance, api_service_name, params, opts \\ []),
+    do: request(finch_instance, api_service_name, params |> Map.put(:method, :delete), opts)
+
+  def put(finch_instance, api_service_name, params, opts \\ []),
+    do: request(finch_instance, api_service_name, params |> Map.put(:method, :put), opts)
+
+  def patch(finch_instance, api_service_name, params, opts \\ []),
+    do: request(finch_instance, api_service_name, params |> Map.put(:method, :patch), opts)
+
   @doc """
   Helper to send a request via the finch instance
   """

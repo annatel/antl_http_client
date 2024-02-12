@@ -2,6 +2,17 @@
 
 # Changelog
 
+## 0.4.0
+
+### 1. Enhancements
+  * add post/4, get/4, delete/4, put/4, patch/4
+
+### 2. Bug fixes
+
+### 3. Soft deprecations (no warnings emitted)
+
+### 4. Hard deprecations
+
 ## 0.3.0
 
 ### 1. Enhancements
@@ -21,7 +32,7 @@ by adding `antl_http_client` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:antl_http_client, "~> 0.3.0"}
+    {:antl_http_client, "~> 0.4.0"}
   ]
 end
 ```

@@ -360,5 +360,70 @@ defmodule AntlHttpClientTest.HttpClientTest do
       assert_received {:update, query}
       %{success: true} = query.changes |> Enum.into(%{})
     end
+
+    test "get", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/test", fn conn ->
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :get,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"}
+               })
+    end
+
+    test "post", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/test", fn conn ->
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :post,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"}
+               })
+    end
+
+    test "put", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "PUT", "/test", fn conn ->
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :put,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"}
+               })
+    end
+
+    test "patch", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "PATCH", "/test", fn conn ->
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :patch,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"}
+               })
+    end
+
+    test "delete", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "DELETE", "/test", fn conn ->
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :delete,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"}
+               })
+    end
   end
 end
