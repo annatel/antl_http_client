@@ -17,6 +17,21 @@ defmodule AntlHttpClientTest.HttpClientTest do
                })
     end
 
+    test "get without request body", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/test", fn conn ->
+        assert {:ok, "", conn} = conn |> Plug.Conn.read_body()
+        Plug.Conn.resp(conn, 200, "{}")
+      end)
+
+      assert {:ok, _} =
+               AntlHttpClient.request(InsecureFinch, "api_service_name", %{
+                 method: :get,
+                 resource: "#{base_url()}/test",
+                 headers: %{"content-type" => "application/json"},
+                 body: nil
+               })
+    end
+
     test "content-type: application/json", %{bypass: bypass} do
       params = %{"data" => "data"}
 

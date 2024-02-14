@@ -2,6 +2,22 @@
 
 # Changelog
 
+## 0.4.1
+
+### 1. Enhancements
+
+### 2. Bug fixes
+  * remove encoding of body nil
+
+### 3. Soft deprecations (no warnings emitted)
+
+### 4. Hard deprecations
+
+## 0.3.0
+
+### 1. Enhancements
+  * 500 and unknown errors more verbose. Returns tuple instead of http_status only.
+
 ## 0.4.0
 
 ### 1. Enhancements
@@ -12,11 +28,6 @@
 ### 3. Soft deprecations (no warnings emitted)
 
 ### 4. Hard deprecations
-
-## 0.3.0
-
-### 1. Enhancements
-  * 500 and unknown errors more verbose. Returns tuple instead of http_status only.
 
 ### 2. Bug fixes
 

@@ -120,7 +120,8 @@ defmodule AntlHttpClient do
       request.request_method,
       request.request_url,
       Map.to_list(request.request_headers),
-      encode!(request.request_headers["content-type"], request.request_body)
+      request.request_body &&
+        encode!(request.request_headers["content-type"], request.request_body)
     )
     |> Finch.request(finch_instance, receive_timeout: receive_timeout)
     |> case do
