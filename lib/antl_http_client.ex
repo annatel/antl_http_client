@@ -62,7 +62,7 @@ defmodule AntlHttpClient do
             required(:method) => atom,
             required(:resource) => binary,
             required(:headers) => map,
-            optional(:body) => map,
+            optional(:body) => map | nil,
             optional(:query_params) => map
           },
           keyword
