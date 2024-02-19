@@ -183,7 +183,7 @@ defmodule AntlHttpClient do
     build_outgoing_request_update_params(response, opts)
     |> tap(
       &Logger.debug(
-        "#{String.capitalize(outgoing_request.destination)}Client request:, #{inspect(&1)}"
+        "#{String.capitalize(outgoing_request.destination)}Client response:, #{inspect(&1)}"
       )
     )
   end
