@@ -7,8 +7,8 @@ defmodule AntlHttpClient.MixProject do
   def project do
     [
       app: :antl_http_client,
-      version: version(),
       elixir: "~> 1.12",
+      version: version(),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
