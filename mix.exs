@@ -1,7 +1,7 @@
 defmodule AntlHttpClient.MixProject do
   use Mix.Project
 
-  @version "0.4.3"
+  @version "0.5.0"
   @source_url "https://github.com/annatel/antl_http_client"
 
   def project do
@@ -36,7 +36,7 @@ defmodule AntlHttpClient.MixProject do
 
   defp deps do
     [
-      {:finch, "~> 0.16.0"},
+      {:finch, "~> 0.19"},
       {:bypass, "~> 2.1.0", only: :test},
       {:app_recorder, "~> 0.4", [env: :prod, hex: "app_recorder", repo: "hexpm"]}
     ]
