@@ -37,6 +37,7 @@ defmodule AntlHttpClient.MixProject do
   defp deps do
     [
       {:finch, "~> 0.19"},
+      {:castore, "~> 1.0"},
       {:bypass, "~> 2.1.0", only: :test},
       {:app_recorder, "~> 0.4", [env: :prod, hex: "app_recorder", repo: "hexpm"]}
     ]
